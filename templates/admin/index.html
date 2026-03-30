@@ -1,0 +1,270 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}Road24 — Dashboard{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --border: #e5e5e7;
+  --text: #1d1d1f;
+  --muted: #6e6e73;
+  --accent: #0071e3;
+  --radius: 14px;
+}
+
+body, #container {
+  background: var(--bg) !important;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+#header {
+  background: rgba(255,255,255,0.8) !important;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-wrap {
+  padding: 30px;
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* TITLE */
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  color: var(--muted);
+  margin-bottom: 25px;
+}
+
+/* STATS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  transition: .2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-value {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* PANELS */
+.panel {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.chart-wrap {
+  padding: 20px;
+  height: 260px;
+}
+
+/* GRID */
+.main-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* TABLE */
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dash-table th {
+  background: #fafafa;
+  padding: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: left;
+}
+
+.dash-table td {
+  padding: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.dash-table tr:hover td {
+  background: #f5f5f7;
+}
+
+/* BUTTONS */
+.action-grid {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.action-btn {
+  background: #f5f5f7;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.action-btn:hover {
+  background: #e8e8ed;
+}
+
+/* MOBILE */
+@media(max-width:1000px){
+  .stats-grid {grid-template-columns: repeat(2,1fr);}
+  .main-grid {grid-template-columns:1fr;}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrap">
+
+<div class="page-title">Dashboard</div>
+<div class="page-subtitle">Road24 boshqaruv paneli</div>
+
+<!-- STATS -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-value">{{ total_users }}</div>
+    <div class="stat-label">Foydalanuvchilar</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ new_today }}</div>
+    <div class="stat-label">Bugun</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ total_messages }}</div>
+    <div class="stat-label">Xabarlar</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value">{{ new_week }}</div>
+    <div class="stat-label">Hafta</div>
+  </div>
+</div>
+
+<!-- CHART -->
+<div class="main-grid">
+  <div class="panel">
+    <div class="panel-header">So‘nggi 7 kun</div>
+    <div class="chart-wrap">
+      <canvas id="weekChart"></canvas>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">Til statistikasi</div>
+    <div class="chart-wrap">
+      <canvas id="langChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- USERS -->
+<div class="panel">
+  <div class="panel-header">So‘nggi foydalanuvchilar</div>
+  <table class="dash-table">
+    <thead>
+      <tr>
+        <th>Ism</th>
+        <th>Username</th>
+        <th>ID</th>
+        <th>Xabarlar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in recent_users %}
+      <tr>
+        <td>{{ u.first_name }}</td>
+        <td>@{{ u.username }}</td>
+        <td>{{ u.user_id }}</td>
+        <td>{{ u.message_count }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- ACTIONS -->
+<div class="panel">
+  <div class="panel-header">Tezkor</div>
+  <div class="action-grid">
+    <a href="/admin/bot/telegramuser/" class="action-btn">Foydalanuvchilar</a>
+    <a href="/admin/bot/telegramuser/?o=-created_at" class="action-btn">Yangi</a>
+    <a href="/admin/" class="action-btn">Admin</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+// WEEK
+new Chart(document.getElementById('weekChart'), {
+  type: 'bar',
+  data: {
+    labels: {{ week_labels|safe }},
+    datasets: [{
+      data: {{ week_data|safe }},
+      backgroundColor: 'rgba(0,113,227,0.15)',
+     adius: 6
+    }]
+  },
+  options: {plugins:{legend:{display:false}}}
+});
+
+// LANG
+new Chart(document.getElementById('langChart'), {
+  type: 'do borderColor: '#0071e3',
+      borderWidth: 2,
+      borderRughnut',
+  data: {
+    labels: ['UZ','RU','None'],
+    datasets: [{
+      data: [{{ uz_users }},{{ ru_users }},{{ no_lang_users }}],
+      backgroundColor: ['#0071e3','#ff3b30','#d2d2d7']
+    }]
+  }
+});
+</script>
+
+{% endblock %}

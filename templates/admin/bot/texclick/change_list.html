@@ -1,0 +1,8 @@
+﻿{% extends "admin/change_list.html" %}
+
+{% block content %}
+{% if stats_cards %}
+{{ stats_cards }}
+{% endif %}
+{{ block.super }}
+{% endblock %}
