@@ -116,7 +116,9 @@ ONE_ID_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
 MENU_DRIWE = InlineKeyboardMarkup([
-    [InlineKeyboardButton("1️⃣ UrbanDriwedan foydalanish", callback_data="b1")],
+    [InlineKeyboardButton("1️⃣ Shartnoma qanday imzolanadi?", callback_data="b1")],
+    [InlineKeyboardButton("2️⃣ Shartnoma tuzish va onlayn imzolash", callback_data="b2")],
+    [InlineKeyboardButton("3️⃣ Qanday to'lov usullari mavjud?", callback_data="b3")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
 
@@ -225,7 +227,9 @@ SMS_MENU_RU = InlineKeyboardMarkup([
     [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
 ])
 URBAN_DRIWE_RU = InlineKeyboardMarkup([
-    [InlineKeyboardButton("1️⃣ Использование UrbanDrive", callback_data="b1")],
+    [InlineKeyboardButton("1️⃣ Как подписать договор?", callback_data="b1")],
+    [InlineKeyboardButton("2️⃣ Договор и онлайн-подписание", callback_data="b2")],
+    [InlineKeyboardButton("3️⃣ Какие способы оплаты доступны?", callback_data="b3")],
     [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
 ])
 
@@ -398,9 +402,31 @@ ANSWERS_UZ = {
         "4️⃣ Internet turini (Wi-Fi / mobil internet) o'zgartirib ko'ring.\n\n"
         "📱 Ushbu amallar odatda texnik muammolarni bartaraf etishga yordam beradi."
     ),
-    "b1":(
-        "Hozirda bu qism to'liq ishga tushgani yoq"
-    )
+"b1": (
+    "📝 Shartnoma qanday imzolanadi?\n\n"
+    "Avtomobilni tanlab, buyurtma qoldirganingizdan so'ng, buyurtmangiz "
+    "\"Profil\" → \"Mening buyurtmalarim\" bo'limiga tushadi.\n"
+    "Kerakli buyurtmani tanlab, undagi \"Buyurtmani imzolash\" tugmasini chapdan o'ngga suring.\n"
+    "Shundan so'ng yuzni skanerlash oynasi ochiladi. "
+    "Jarayon muvaffaqiyatli yakunlangach, buyurtma imzolanadi."
+),
+"b2": (
+    "📄 UrbanDrive'da shartnoma qanday tuziladi va uni onlayn imzolash mumkinmi?\n\n"
+    "Ha, UrbanDrive'da shartnoma tuzish va uni onlayn imzolash mumkin.\n"
+    "Avtomobil uchun buyurtma yaratilgach, shartnoma avtomatik ravishda shakllantiriladi. "
+    "Siz uni \"Mening buyurtmalarim\" bo'limida ko'rishingiz va yuklab olishingiz mumkin.\n"
+    "Shuningdek, \"Buyurtmani imzolash\" tugmasi orqali shartnomani elektron tarzda imzolashingiz mumkin."
+),
+"b3": (
+    "💳 UrbanDrive'da qanday to'lov usullari mavjud?\n\n"
+    "UrbanDrive'da quyidagi to'lov usullari mavjud:\n"
+    "• Naqd pul\n"
+    "• Bank kartasi yoki Payme orqali onlayn to'lov\n"
+    "• Bo'lib to'lash (muddatli to'lov)\n"
+    "• Kredit\n"
+    "• Lizing\n\n"
+    "Barcha jarayonlar ilova orqali amalga oshiriladi."
+),
 }
 
 # ================= JAVOBLAR RUS =================
@@ -568,9 +594,31 @@ ANSWERS_RU = {
         "4️⃣ Смените тип интернета (Wi-Fi / мобильный интернет) и повторите попытку.\n\n"
         "📱 Эти действия, как правило, устраняют технические проблемы с входом в приложение."
     ),
-    "b1":(
-        "В настоящее время этот раздел ещё не запущен"
-    )
+"b1": (
+    "📝 Как подписать договор?\n\n"
+    "После того как вы выбрали автомобиль и оформили заказ, он появится в разделе "
+    "\"Профиль\" → \"Мои заказы\".\n"
+    "Выберите нужный заказ и проведите пальцем по кнопке \"Подписать заказ\" слева направо.\n"
+    "После этого откроется окно сканирования лица. "
+    "После успешного завершения процесса заказ будет подписан."
+),
+"b2": (
+    "📄 Как заключить договор в UrbanDrive и можно ли подписать его онлайн?\n\n"
+    "Да, в UrbanDrive можно заключить договор и подписать его онлайн.\n"
+    "После создания заказа на автомобиль договор формируется автоматически. "
+    "Вы можете просмотреть и скачать его в разделе \"Мои заказы\".\n"
+    "Также вы можете подписать договор электронно через кнопку \"Подписать заказ\"."
+),
+"b3": (
+    "💳 Какие способы оплаты доступны в UrbanDrive?\n\n"
+    "В UrbanDrive доступны следующие способы оплаты:\n"
+    "• Наличные\n"
+    "• Онлайн-оплата картой или через Payme\n"
+    "• Рассрочка\n"
+    "• Кредит\n"
+    "• Лизинг\n\n"
+    "Все процессы выполняются через приложение."
+),
 }
 
 
