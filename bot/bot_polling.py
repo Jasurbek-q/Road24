@@ -13,7 +13,7 @@ from bot.models import (
     ButtonClick, TelegramUser,
     JarimaClick, SugurtaClick, MashinaClick, SmsClick,
     TonirovkaClick, TexClick, MikroClick, SignalClick,
-    OneIdClick, SlowClick
+    OneIdClick, SlowClick, DriweClick
 )
 
 logging.basicConfig(level=logging.INFO)
@@ -57,6 +57,9 @@ MAIN_MENU_UZ = InlineKeyboardMarkup([
     ],
     [
         InlineKeyboardButton("🌐 Tilni o'zgartirish", callback_data="change_lang"),
+        InlineKeyboardButton("UrbanDriwe", callback_data="menu_driwe"),
+    ],
+[
         InlineKeyboardButton("👨‍💼 Operator", callback_data="open_operator"),
     ],
 
@@ -112,6 +115,10 @@ ONE_ID_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ ONE ID dan ro'yxatdan o'tish", callback_data="o1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
+MENU_DRIWE = InlineKeyboardMarkup([
+    [InlineKeyboardButton("1️⃣ UrbanDriwedan foydalanish", callback_data="b1")],
+    [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
+])
 
 MASHINA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Mashina qo'shish", callback_data="f1")],
@@ -151,6 +158,9 @@ MAIN_MENU_RU = InlineKeyboardMarkup([
     ],
     [
         InlineKeyboardButton("🌐 Сменить язык", callback_data="change_lang"),
+        InlineKeyboardButton("Урбан Драйв", callback_data="menu_driwe"),
+    ],
+[
         InlineKeyboardButton("👨‍💼 Оператор", callback_data="open_operator"),
     ],
 ])
@@ -212,6 +222,10 @@ MASHINA_MENU_RU = InlineKeyboardMarkup([
 
 SMS_MENU_RU = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ SMS не пришёл при регистрации", callback_data="g1")],
+    [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
+])
+URBAN_DRIWE_RU = InlineKeyboardMarkup([
+    [InlineKeyboardButton("1️⃣ Использование UrbanDrive", callback_data="b1")],
     [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
 ])
 
@@ -384,6 +398,9 @@ ANSWERS_UZ = {
         "4️⃣ Internet turini (Wi-Fi / mobil internet) o'zgartirib ko'ring.\n\n"
         "📱 Ushbu amallar odatda texnik muammolarni bartaraf etishga yordam beradi."
     ),
+    "b1":(
+        "Hozirda bu qism to'liq ishga tushgani yoq"
+    )
 }
 
 # ================= JAVOBLAR RUS =================
@@ -551,6 +568,9 @@ ANSWERS_RU = {
         "4️⃣ Смените тип интернета (Wi-Fi / мобильный интернет) и повторите попытку.\n\n"
         "📱 Эти действия, как правило, устраняют технические проблемы с входом в приложение."
     ),
+    "b1":(
+        "В настоящее время этот раздел ещё не запущен"
+    )
 }
 
 
@@ -602,6 +622,7 @@ MENU_MODEL_MAP = {
     "menu_tonirovka": TonirovkaClick, "menu_tex": TexClick,
     "menu_mikro": MikroClick, "menu_signal": SignalClick,
     "menu_oneid": OneIdClick, "menu_slow": SlowClick,
+    "menu_driwe": DriweClick,
 }
 
 BUTTON_NAMES = {
@@ -610,6 +631,7 @@ BUTTON_NAMES = {
     "menu_tonirovka": "Tonirovka", "menu_tex": "Texnik ko'rik",
     "menu_mikro": "Mikroqarz", "menu_signal": "AutoSignal",
     "menu_oneid": "ONE ID", "menu_slow": "Ilova ishlashi",
+    "menu_driwe": "Urban Driwe",
 }
 
 
@@ -718,30 +740,24 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
         main_menu = get_main_menu_by_lang(lang)
 
         if d == "open_operator":
-
             await save_operator_click(user_id)
+
             op_text = get_text_by_lang(lang,
-                                       "👨‍💼 Operator bilan bog'lanish uchun quyidagi linkka bosing:\n\nhttps://t.me/Road24assist",
-                                       "👨‍💼 Для связи с оператором нажмите на ссылку ниже:\n\nhttps://t.me/Road24assist")
+                                       "👨‍💼 Operator bilan bog'lanish uchun quyidagi linkka bosing:",
+                                       "👨‍💼 Для связи с оператором нажмите на ссылку ниже:")
 
+            op_keyboard = InlineKeyboardMarkup([
+                [InlineKeyboardButton(
+                    get_text_by_lang(lang, "👨‍💼 Operatorga o'tish", "👨‍💼 Перейти к оператору"),
+                    url="https://t.me/Road24assist"
+                )],
+                [InlineKeyboardButton(
+                    get_text_by_lang(lang, "⬅️ Menyuga qaytish", "⬅️ Вернуться в меню"),
+                    callback_data="back_main"
+                )],
+            ])
 
-            sent_msg = await q.message.reply_text(op_text)
-
-
-            import asyncio
-            await asyncio.sleep(10)
-            try:
-                await sent_msg.delete()
-                await q.message.delete()
-            except Exception as e:
-                logging.error(f"O'chirishda xato: {e}")
-
-
-            await context.bot.send_message(
-                chat_id=user_id,
-                text=get_text_by_lang(lang, "Asosiy menyu 👇", "Главное меню 👇"),
-                reply_markup=main_menu
-            )
+            await q.edit_message_text(op_text, reply_markup=op_keyboard)
             return
 
         if d == "back_main":
@@ -778,6 +794,10 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await q.edit_message_text(
                 get_text_by_lang(lang, "🎨 Tonirovka bo'limi:", "🎨 Раздел тонировки:"),
                 reply_markup=get_menu_by_lang(lang, TONIROVKA_MENU_UZ, TONIROVKA_MENU_RU))
+        elif d == "menu_driwe":
+            await q.edit_message_text(
+                get_text_by_lang(lang, "UrbanDriwe:", "Использование UrbanDrive:"),
+                reply_markup=get_menu_by_lang(lang, MENU_DRIWE, URBAN_DRIWE_RU))
 
         elif d == "menu_tex":
             await q.edit_message_text(
@@ -824,6 +844,8 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 # ================= BUSINESS MESSAGE =================
+
+
 async def business_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.business_message
     if not msg:
@@ -919,7 +941,8 @@ def main():
         listen="0.0.0.0",
         port=8443,
         webhook_url=webhook_url,
-        allowed_updates=Update.ALL_TYPES
+        allowed_updates=Update.ALL_TYPES,
+        drop_pending_updates = True,
     )
 
 

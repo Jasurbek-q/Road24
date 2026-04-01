@@ -8,7 +8,7 @@ from .models import (
     TelegramUser, ButtonClick,
     JarimaClick, SugurtaClick, MashinaClick, SmsClick,
     TonirovkaClick, TexClick, MikroClick, SignalClick,
-    OneIdClick, SlowClick, OperatorClick
+    OneIdClick, SlowClick, OperatorClick, DriweClick
 )
 
 TASHKENT_TZ = pytz.timezone("Asia/Tashkent")
@@ -185,6 +185,9 @@ class SignalAdmin(BaseClickAdmin): pass
 
 @admin.register(OneIdClick)
 class OneIdAdmin(BaseClickAdmin): pass
+
+@admin.register(DriweClick)
+class DriweAdmin(BaseClickAdmin): pass
 
 @admin.register(SlowClick)
 class SlowAdmin(BaseClickAdmin): pass

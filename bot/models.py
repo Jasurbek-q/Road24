@@ -109,6 +109,10 @@ class OneIdClick(BaseClick):
         verbose_name = "ONE ID"
         verbose_name_plural = "♻️ ONE ID bosishlar"
 
+class DriweClick(BaseClick):
+    class Meta(BaseClick.Meta):
+        verbose_name = "UrbanDriwe"
+        verbose_name_plural = "🚗UrbanDriwe bosishlar"
 
 class SlowClick(BaseClick):
     class Meta(BaseClick.Meta):
