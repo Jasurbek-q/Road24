@@ -1,13 +1,21 @@
-import sys
-import django
-import logging
 import os
+import sys
+import logging
+import django
+from pyngrok import ngrok
 from dotenv import load_dotenv
+
 load_dotenv()
+
 TOKEN = os.getenv("BOT_TOKEN")
+NGROK_AUTH_TOKEN = os.getenv("NGROK_TOKEN")
+
+if NGROK_AUTH_TOKEN:
+    ngrok.set_auth_token(NGROK_AUTH_TOKEN)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Road24_Bot.settings')
 django.setup()
+
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, MessageHandler, filters
@@ -943,13 +951,17 @@ async def business_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 from pyngrok import ngrok
+async def on_startup(application: Application):
+    await application.bot.delete_webhook(drop_pending_updates=True)
+    print("Eski xabarlar (pending updates) tozalandi.")
+
 def main():
-    ngrok.set_auth_token("3B76mknjhh1mOYkUdHRy0Ldiewh_iD24zPR6T4HfuvpGhDBU")
     tunnel = ngrok.connect(8443)
     webhook_url = tunnel.public_url
     print(f"🚀 BOT ISHLADI | Webhook: {webhook_url}")
-
     app = Application.builder().token(TOKEN).build()
+    app.post_init = on_startup
+
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(callbacks))
     app.add_handler(MessageHandler(filters.UpdateType.BUSINESS_MESSAGE, business_message))
@@ -959,7 +971,7 @@ def main():
         port=8443,
         webhook_url=webhook_url,
         allowed_updates=Update.ALL_TYPES,
-        drop_pending_updates = True,
+        drop_pending_updates=True,
     )
 
 if __name__ == "__main__":
