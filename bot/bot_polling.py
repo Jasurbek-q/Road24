@@ -1,7 +1,10 @@
-import os
 import sys
 import django
 import logging
+import os
+from dotenv import load_dotenv
+load_dotenv()
+TOKEN = os.getenv("BOT_TOKEN")
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Road24_Bot.settings')
 django.setup()
@@ -21,16 +24,11 @@ logging.basicConfig(level=logging.INFO)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
 
-from django.conf import settings
-TOKEN = settings.TELEGRAM_BOT_TOKEN
-
-# ================= TIL TANLASH MENUSI =================
 LANG_MENU = InlineKeyboardMarkup([
     [InlineKeyboardButton("🇺🇿 O'zbek tili", callback_data="lang_uz")],
     [InlineKeyboardButton("🇷🇺 Русский язык", callback_data="lang_ru")],
 ])
 
-# ================= O'ZBEK MENYULARI =================
 MAIN_MENU_UZ = InlineKeyboardMarkup([
     [
         InlineKeyboardButton("🚔 Jarima va E jarima Ball", callback_data="menu_jarima"),
@@ -57,7 +55,7 @@ MAIN_MENU_UZ = InlineKeyboardMarkup([
     ],
     [
         InlineKeyboardButton("🌐 Tilni o'zgartirish", callback_data="change_lang"),
-        InlineKeyboardButton("UrbanDriwe", callback_data="menu_driwe"),
+        InlineKeyboardButton("🚗Urban Drive", callback_data="menu_driwe"),
     ],
 [
         InlineKeyboardButton("👨‍💼 Operator", callback_data="open_operator"),
@@ -65,21 +63,19 @@ MAIN_MENU_UZ = InlineKeyboardMarkup([
 
 
 ])
-
 JARIMA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("Jarima Ko'rinmayapti", callback_data="j1")],
     [InlineKeyboardButton("Jarimaga to'ladim, lekin jarima o'chmadi", callback_data="j2")],
     [InlineKeyboardButton("Jarimani qanday to'lash mumkin", callback_data="j3")],
     [InlineKeyboardButton("Jarimadan etiroz", callback_data="j4")],
     [InlineKeyboardButton("To'lov chekini olish", callback_data="j5")],
-    [InlineKeyboardButton("to'langan, MIBda faol", callback_data="j6")],
+    [InlineKeyboardButton("To'langan, MIBda faol", callback_data="j6")],
     [InlineKeyboardButton("Barchasiga bir vaqtda to'lash mumkinmi", callback_data="j7")],
     [InlineKeyboardButton("Jarima 48 soatdan keyin keldi", callback_data="j8")],
     [InlineKeyboardButton("Jarima ilovada yoq, (SMS)da keldi", callback_data="j9")],
     [InlineKeyboardButton("YHXX(GAI) bilan bog'lanish", callback_data="j10")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 SUGURTA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Sug'urta sotib olish", callback_data="s1")],
     [InlineKeyboardButton("2️⃣ Sug'urta ilovada ko'rinmayapti", callback_data="s2")],
@@ -87,17 +83,14 @@ SUGURTA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("4️⃣ Sug'urta turlari", callback_data="s4")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 TONIROVKA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Tonirovka: sotib olish, bekor qilish, korinmayapti", callback_data="t1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 TEX_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Texnik ko'rik malumoti ko'rinmayapti yoki notog'ri", callback_data="x1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 MIKRO_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Mikroqarz qancha vaqt ichida tasdiqlanadi?", callback_data="q1")],
     [InlineKeyboardButton("2️⃣ Mikrokredit olish uchun qanday hujjatlar kerak?", callback_data="q2")],
@@ -105,12 +98,10 @@ MIKRO_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("4️⃣ Kim mikrokredit olishi mumkin?", callback_data="q4")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 SIGNAL_MENU_UZ = InlineKeyboardMarkup([
-    [InlineKeyboardButton("1️⃣ AuToSignal nima va vazifasi?", callback_data="a1")],
+    [InlineKeyboardButton("1️⃣ AutoSignal nima va vazifasi?", callback_data="a1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 ONE_ID_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ ONE ID dan ro'yxatdan o'tish", callback_data="o1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
@@ -126,17 +117,14 @@ MASHINA_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Mashina qo'shish", callback_data="f1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 SMS_MENU_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("1️⃣ Ro'yxatdan o'tishda sms kelmadi", callback_data="g1")],
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
-
 BACK_UZ = InlineKeyboardMarkup([
     [InlineKeyboardButton("⬅️ Orqaga", callback_data="back_main")]
 ])
 
-# ================= RUS MENYULARI =================
 MAIN_MENU_RU = InlineKeyboardMarkup([
     [
         InlineKeyboardButton("🚗 Добавить автомобил", callback_data="menu_mashina"),
@@ -233,11 +221,11 @@ URBAN_DRIWE_RU = InlineKeyboardMarkup([
     [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
 ])
 
+
 BACK_RU = InlineKeyboardMarkup([
     [InlineKeyboardButton("⬅️ Назад", callback_data="back_main")]
 ])
 
-# ================= JAVOBLAR O'ZBEK =================
 ANSWERS_UZ = {
     "j1": (
         "🚗 Road24 ilovasi orqali avtomobilingizga rasmiylashtirilgan jarimalarni kuzating, tekshiring va to'lang.\n"
@@ -429,7 +417,6 @@ ANSWERS_UZ = {
 ),
 }
 
-# ================= JAVOBLAR RUS =================
 ANSWERS_RU = {
     "j1": (
         "🚗 Через приложение Road24 вы можете отслеживать, проверять и оплачивать штрафы на ваш автомобиль.\n"
@@ -621,14 +608,8 @@ ANSWERS_RU = {
 ),
 }
 
-
-# ================= DB FUNKSIYALAR =================
 @sync_to_async
 def get_lang_async(user_id):
-    """
-    Foydalanuvchi tilini to'g'ridan-to'g'ri DB dan o'qiydi.
-    Bu async context da ishlashi uchun sync_to_async bilan o'ralgan.
-    """
     try:
         user = TelegramUser.objects.filter(user_id=user_id).first()
         return user.lang if (user and user.lang) else None
@@ -708,7 +689,6 @@ def save_operator_click(user_id):
         logging.error(f"OPERATOR SAVE ERROR: {e}")
 
 
-# ================= TIL BO'YICHA YORDAMCHI FUNKSIYALAR =================
 def get_main_menu_by_lang(lang):
     return MAIN_MENU_RU if lang == "ru" else MAIN_MENU_UZ
 
@@ -724,30 +704,25 @@ def get_menu_by_lang(lang, menu_uz, menu_ru):
 def get_text_by_lang(lang, uz_text, ru_text):
     return ru_text if lang == "ru" else uz_text
 
-
-# ================= START =================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🌐 Tilni tanlang / Выберите язык:",
         reply_markup=LANG_MENU
     )
 
-
-# ================= CALLBACKS =================
 async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
     d = q.data
     user_id = q.from_user.id
     tg_user = q.from_user
 
-    # Xatolikni oldini olish uchun answer'ni bir marta try ichida bajaramiz
     try:
         await q.answer()
     except Exception:
         pass
 
     try:
-        # ── 1. Til tanlash ──────────────────────────────────────────
+
         if d == "lang_uz":
             await set_user_lang(user_id, "uz",
                                 first_name=tg_user.first_name or "",
@@ -774,7 +749,7 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=LANG_MENU)
             return
 
-        # ── 2. DB dan tilni o'qish ──────────────────────────────────
+
         lang = await get_lang_async(user_id)
         if lang is None:
             await q.edit_message_text(
@@ -782,7 +757,7 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=LANG_MENU)
             return
 
-        # Tilga mos ma'lumotlarni yuklaymiz
+
         answers = get_answers_by_lang(lang)
         back = get_back_by_lang(lang)
         main_menu = get_main_menu_by_lang(lang)
@@ -891,8 +866,6 @@ async def callbacks(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.error(f"CALLBACK XATOSI: {e}")
 
 
-# ================= BUSINESS MESSAGE =================
-
 
 async def business_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     msg = update.business_message
@@ -969,11 +942,7 @@ async def business_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             get_main_menu_by_lang(lang)
         )
 
-
-# ================= MAIN =================
 from pyngrok import ngrok
-
-
 def main():
     ngrok.set_auth_token("3B76mknjhh1mOYkUdHRy0Ldiewh_iD24zPR6T4HfuvpGhDBU")
     tunnel = ngrok.connect(8443)
@@ -992,7 +961,6 @@ def main():
         allowed_updates=Update.ALL_TYPES,
         drop_pending_updates = True,
     )
-
 
 if __name__ == "__main__":
     main()

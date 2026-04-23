@@ -40,8 +40,6 @@ class ButtonClick(models.Model):
     def __str__(self):
         return f"{self.button_name} — {self.clicked_at}"
 
-
-# ================= MENU BO'LIMLARI =================
 class BaseClick(models.Model):
     user = models.ForeignKey(TelegramUser, on_delete=models.SET_NULL, null=True, blank=True)
     button_key = models.CharField(max_length=50)
@@ -124,3 +122,7 @@ class OperatorClick(BaseClick):
     class Meta(BaseClick.Meta):
         verbose_name = "Operator"
         verbose_name_plural = "👨‍💼 Operator bosishlar"
+
+
+
+

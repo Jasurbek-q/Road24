@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils import timezone
 from datetime import timedelta, datetime
 import pytz
 from django.utils.html import format_html
@@ -24,7 +23,6 @@ def fmt_tashkent(dt):
         return "—"
     return dt.astimezone(TASHKENT_TZ).strftime("%d.%m.%Y %H:%M")
 
-# ================= STATISTIKA MIXIN =================
 class StatsMixin:
     stats_field = 'clicked_at'
     change_list_template = "admin/bot/change_list.html"
@@ -105,7 +103,6 @@ class StatsMixin:
         extra_context['stats_cards'] = cards_html
         return super().changelist_view(request, extra_context=extra_context)
 
-# ================= FOYDALANUVCHILAR ADMIN =================
 @admin.register(TelegramUser)
 class TelegramUserAdmin(StatsMixin, admin.ModelAdmin):
     stats_field = 'created_at'
@@ -132,7 +129,6 @@ class TelegramUserAdmin(StatsMixin, admin.ModelAdmin):
         flag = "🇺🇿 UZ" if obj.lang == 'uz' else "🇷🇺 RU" if obj.lang == 'ru' else "❓"
         return format_html('<span style="font-weight:700">{}</span>', flag)
 
-# ================= CLICK ADMIN BAZASI =================
 MENU_COLORS = {
     'menu_jarima': ('#ef4444', '🚔'), 'menu_sugurta': ('#3b82f6', '🛡'),
     'menu_mashina': ('#10b981', '🚗'), 'menu_sms': ('#f59e0b', '📨'),
@@ -158,7 +154,7 @@ class BaseClickAdmin(StatsMixin, admin.ModelAdmin):
         if obj.user: return f"{obj.user.first_name} ({obj.user.user_id})"
         return "—"
 
-# ================= HAR BIR MENU ADMINI =================
+
 @admin.register(JarimaClick)
 class JarimaAdmin(BaseClickAdmin): pass
 
@@ -208,3 +204,5 @@ class OperatorAdmin(BaseClickAdmin):
 
 @admin.register(ButtonClick)
 class ButtonClickAdmin(BaseClickAdmin): pass
+
+
